@@ -1,19 +1,27 @@
-import { Button, Navbar, TextInput } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
-import {AiOutlineSearch} from "react-icons/ai";
+//! ada 3 library yang digunakan intuk header.jsx
+import { Button, Navbar, TextInput } from "flowbite-react"; //!library flowbite-react
+import { Link, useLocation } from "react-router-dom"; //!library react-router-dom
+import {AiOutlineSearch} from "react-icons/ai"; //!library react-icon
 import {FaMoon} from "react-icons/fa"
 
 export default function Header() {
     const path = useLocation().pathname;
-  return (
-    <Navbar className="border-b-2">
-        <Link to="/" className="self-center whitespace-nowrap text-sm
-        sm:text-xl font-semibold dark:text-white">
+    return (
+    
+    //!Bagian Navbar
+    <Navbar className="border-b-4">
+
+        {/*Membuat logo dengan Link dengan tujuan ke path "/" */}
+        <Link to="/" className="self-center whitespace-nowrap text-xl sm:text-xl font-semibold dark:text-white">
+            {/*nama "Ahmad" yang ada dilogo */}
             <span className="px-4 py-1 bg-gradient-to-r from-blue-800 
             via-blue-500 to-orange-500 rounded-lg text-white">Ahmad</span>
             Blog
         </Link>
+
+        {/*membuat search bar */}
         <form>
+            {/*desain dari search bar */}
             <TextInput 
                 type="text"
                 placeholder="Search..."
@@ -21,31 +29,43 @@ export default function Header() {
                 className="hidden lg:inline"
             />
         </form>
+
+        {/*membuat ikon search (AiOutlineSearch) ketika layar mengecil */}
         <Button className="w-12 h-10 lg:hidden" color="gray">
             <AiOutlineSearch />
         </Button>
+        
+        {/*membuat wadah untuk tombol mode, tombol sign-in, dan toogle */}
         <div className="flex gap-2 md:order-2">
-            <Button className="w-12 h-10 hidden sm:inline" color="gray">
+            {/*membuat tombol mode dengan ikon FaMoon */}
+            <Button className="w-12 h-10 sm:inline" color="gray">
                 <FaMoon />
             </Button>
+            {/*membuat link ke page sign-in berbentuk tombol */}
             <Link to="/sign-IN">
                 <Button gradientDuoTone="purpleToBlue">
                     Sign In
                 </Button>
             </Link>
+            {/*membuat Navbar toogle */}
             <Navbar.Toggle />
         </div>
+
+        {/*membuat Navigasi responsive Home, About, Project */}
         <Navbar.Collapse>
+                {/*Nav HOME */}
                 <Navbar.Link active={path === "/"} as={"div"}>
                     <Link to="/">
                         Home
                     </Link>
                 </Navbar.Link>
+                {/*Nav ABOUT */}
                 <Navbar.Link active={path === "/about"} as={"div"}>
                     <Link to="/about">
                         About
                     </Link>
                 </Navbar.Link>
+                {/*Nav PROJECT */}
                 <Navbar.Link active={path === "/project"} as={"div"}>
                     <Link to="/project">
                         Project
