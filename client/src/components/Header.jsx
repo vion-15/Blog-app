@@ -43,7 +43,7 @@ export default function Header() {
             </Button>
             {/*membuat link ke page sign-in berbentuk tombol */}
             <Link to="/sign-IN">
-                <Button gradientDuoTone="purpleToBlue">
+                <Button gradientDuoTone="purpleToBlue" outline>
                     Sign In
                 </Button>
             </Link>
