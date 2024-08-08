@@ -1,13 +1,14 @@
 //! ada 3 library yang digunakan intuk header.jsx
-import { Button, Navbar, TextInput } from "flowbite-react"; //!library flowbite-react
+import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react"; //!library flowbite-react
 import { Link, useLocation } from "react-router-dom"; //!library react-router-dom
 import {AiOutlineSearch} from "react-icons/ai"; //!library react-icon
-import {FaMoon} from "react-icons/fa"
+import {FaMoon} from "react-icons/fa";
+import {useSelector} from "react-redux";
 
 export default function Header() {
     const path = useLocation().pathname;
+    const {currentUser} = useSelector(state =>  state.user)
     return (
-    
     //!Bagian Navbar
     <Navbar className="border-b-4">
 
@@ -41,12 +42,32 @@ export default function Header() {
             <Button className="w-12 h-10 sm:inline" color="gray">
                 <FaMoon />
             </Button>
-            {/*membuat link ke page sign-in berbentuk tombol */}
+
+            {currentUser ? (
+                <Dropdown arrowIcon={false} inline label={
+                    <Avatar alt="user" img={currentUser.profilePicture} rounded/>
+                }>
+                    <Dropdown.Header>
+                        <span className="block text-sm">@{currentUser.username}</span>
+                        <span className="block text-sm font-medium truncate">@{currentUser.email}</span>
+                    </Dropdown.Header>
+                    <Link to={'/dashboard?tab=profile'}>
+                        <Dropdown.Item>
+                            Profile
+                        </Dropdown.Item>
+                    </Link>
+                    <Dropdown.Divider />
+                    <Dropdown.Item>
+                        Sign Out
+                    </Dropdown.Item>
+                </Dropdown>
+            ):(
             <Link to="/sign-IN">
-                <Button gradientDuoTone="purpleToBlue" outline>
-                    Sign In
-                </Button>
-            </Link>
+            <Button gradientDuoTone="purpleToBlue" outline>
+                Sign In
+            </Button>
+            </Link>  
+            )}
             {/*membuat Navbar toogle */}
             <Navbar.Toggle />
         </div>
