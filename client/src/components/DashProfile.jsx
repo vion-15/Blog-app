@@ -16,9 +16,10 @@ import {
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
 export default function DashProfile() {
-    const { currentUser, error } = useSelector((state) => state.user);
+    const { currentUser, error, loading } = useSelector((state) => state.user);
     const [imageFile, setImageFile] = useState(null);
     const [imageFileUrl, setImageFileUrl] = useState(null);
     const [formData, setFormData] = useState({});
@@ -192,9 +193,17 @@ export default function DashProfile() {
                 <TextInput type='email' id='email' placeholder='E-mail' defaultValue={currentUser.email} onChange={handleChange} />
                 <TextInput type='password' id='password' placeholder='Password' onChange={handleChange} />
 
-                <Button type='submit' gradientDuoTone='purpleToBlue' outline>
-                    Update
+                <Button type='submit' gradientDuoTone='purpleToBlue' outline disabled={loading || imageUploading}>
+                    {loading ? 'loading...' : 'update'}
                 </Button>
+                {
+                    currentUser.isAdmin && (
+                        // eslint-disable-next-line react/jsx-no-undef
+                        <Link to={'/create-post'}>
+                            <Button type='button' gradientDuoTone='purpleToPink' className='w-full'>Posting Sesuatu</Button> 
+                        </Link>
+                    )
+                }
             </form>
 
             <div className="text-red-500  flex justify-between mt-5">
