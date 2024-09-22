@@ -67,3 +67,15 @@ export const getposts = async (req, res, next) => {
         next(error);
     };
 };
+
+export const deleteposts = async (req, res, next) => {
+    if(!req.user.isAdmin || req.user.id !== req.params.userId){
+        return next(errorHandler(403, 'Kamu tidak diizinkan menghapus post'));
+    }
+    try {
+        await Post.findByIdAndDelete(req.params.postId);
+        res.status(200).json('Post sudah di delete');
+    } catch (error) {
+        next(error);
+    };
+};
