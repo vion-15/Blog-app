@@ -1,16 +1,19 @@
 import { Alert, Button, Textarea } from 'flowbite-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
+import Comment from './Comment';
 
 
-export default function CommentSection({postId}) {
-    const {currentUser} = useSelector(state => state.user);
+export default function CommentSection({ postId }) {
+    const { currentUser } = useSelector(state => state.user);
     const [comment, setComment] = useState('');
     const [commentError, setCommentError] = useState(null);
+    const [comments, setComments] = useState([]);
+    console.log(comments);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(comment.length > 200){
+        if (comment.length > 200) {
             return;
         }
         try {
@@ -19,38 +22,55 @@ export default function CommentSection({postId}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({content:comment, postId, userId:currentUser._id}),
+                body: JSON.stringify({ content: comment, postId, userId: currentUser._id }),
             });
             const data = await res.json();
-            if(res.ok){
+            if (res.ok) {
                 setComment('');
                 setCommentError(null);
+                setComments([data, ...comments]);
             }
         } catch (error) {
             setCommentError(error.message);
         }
-        
+
     }
+
+    useEffect(() => {
+        const getComments = async () => {
+            try {
+                const res = await fetch(`/api/comment/getPostComments/${postId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setComments(data);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        getComments();
+    }, [postId]);
+
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>
-            {currentUser ? 
-            (
-                <div className='flex items-center gap-1 my-5 text-gray-500 text-sm'>
-                    <p>Login sebagai:</p>
-                    <img className='h-5 w-5 object-cover rounded-full' src={currentUser.profilePicture} alt="" />
-                    <Link to={'/dashboard?tab=profile'} className='text-xs text-cyan-600 hover:underline'>
-                        @{currentUser.username}
-                    </Link>
-                </div>
-            ):
-            (
-                <div className='text-sm text-teal-500 my-5 flex gap-1'>
-                    Kamu harus Login untuk komen
-                    <Link className='text-blue-500 hover:underline' to={'/sign-in'}>
-                        Sign In
-                    </Link>
-                </div>
-            )}
+            {currentUser ?
+                (
+                    <div className='flex items-center gap-1 my-5 text-gray-500 text-sm'>
+                        <p>Login sebagai:</p>
+                        <img className='h-5 w-5 object-cover rounded-full' src={currentUser.profilePicture} alt="" />
+                        <Link to={'/dashboard?tab=profile'} className='text-xs text-cyan-600 hover:underline'>
+                            @{currentUser.username}
+                        </Link>
+                    </div>
+                ) :
+                (
+                    <div className='text-sm text-teal-500 my-5 flex gap-1'>
+                        Kamu harus Login untuk komen
+                        <Link className='text-blue-500 hover:underline' to={'/sign-in'}>
+                            Sign In
+                        </Link>
+                    </div>
+                )}
             {currentUser && (
                 <form onSubmit={handleSubmit} className='border border-teal-500 rounded-md p-3'>
                     <Textarea
@@ -68,6 +88,24 @@ export default function CommentSection({postId}) {
                         <Alert color='failure' className='mt-5'>{commentError}</Alert>
                     )}
                 </form>
+            )}
+            {comments.length === 0 ? (
+                <p className='text-sm my-5'>Belum Ada Komen!</p>
+            ) : (
+                <>
+                    <div className="text-sm my-5 flex items-center gap-1">
+                        <p>Comments</p>
+                        <div className="border border-gray-400 py-1 px-2 rounded-sm">
+                            <p>{comments.length}</p>
+                        </div>
+                    </div>
+                    {
+                        comments.map(comment => (
+                            <Comment key={comment._id} comment={comment} />
+                        ))
+                    }
+                </>
+
             )}
         </div>
     )
