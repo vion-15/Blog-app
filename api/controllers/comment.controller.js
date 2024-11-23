@@ -72,3 +72,19 @@ export const editComment = async (req, res, next) => {
         next(error);
     }
 };
+
+export const deleteComment = async (req, res, next) => {
+    try {
+        const comment = await Comment.findById(req.params.commentId);
+        if(!comment){
+            return next(errorHandler(404, 'Komen tidak ditemukan'));
+        }
+        if(comment.userId !== req.user._id && !req.user.isAdmin){
+            return next(errorHandler(403, 'Kamu tidak diizinkan menghapus komen ini'));
+        }
+        await Comment.findByIdAndDelete(req.params.commentId);
+        res.status(200).json('Komen sudah dihapus');
+    } catch (error) {
+        next(error);
+    }
+};

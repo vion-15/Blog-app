@@ -4,7 +4,7 @@ import { FaThumbsUp } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Button, Textarea } from "flowbite-react";
 
-export default function Comment({ comment, onLike, onEdit }) {
+export default function Comment({ comment, onLike, onEdit, onDelete }) {
     const [user, setUser] = useState({});
     const { currentUser } = useSelector((state) => state.user);
     const [isEditing, setIsEditing] = useState(false);
@@ -40,7 +40,7 @@ export default function Comment({ comment, onLike, onEdit }) {
                     content: editedContent
                 })
             });
-            if(res.ok){
+            if (res.ok) {
                 setIsEditing(false);
                 onEdit(comment, editedContent);
             }
@@ -64,21 +64,21 @@ export default function Comment({ comment, onLike, onEdit }) {
                 </div>
                 {isEditing ? (
                     <>
-                    <Textarea
-                        className="mb-2"
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                    />
-                    <div className="flex justify-end gap-2">
-                        <Button type="button" size='sm' gradientDuoTone='purpleToBlue'
-                        onClick={handleSave}>
-                            Save
-                        </Button>
-                        <Button type="button" size='sm' gradientDuoTone='purpleToBlue' outline
-                        onClick={() => setIsEditing(false)}>
-                            Cancel
-                        </Button>
-                    </div>
+                        <Textarea
+                            className="mb-2"
+                            value={editedContent}
+                            onChange={(e) => setEditedContent(e.target.value)}
+                        />
+                        <div className="flex justify-end gap-2">
+                            <Button type="button" size='sm' gradientDuoTone='purpleToBlue'
+                                onClick={handleSave}>
+                                Save
+                            </Button>
+                            <Button type="button" size='sm' gradientDuoTone='purpleToBlue' outline
+                                onClick={() => setIsEditing(false)}>
+                                Cancel
+                            </Button>
+                        </div>
                     </>
                 ) : (
                     <>
@@ -96,10 +96,16 @@ export default function Comment({ comment, onLike, onEdit }) {
                             </p>
                             {
                                 currentUser && (currentUser._id === comment.userId || currentUser.isAdmin) && (
-                                    <button type="button" className="text-gray-400 hover:text-blue-500"
-                                        onClick={handleEdit}>
-                                        Edit
-                                    </button>
+                                    <>
+                                        <button type="button" className="text-gray-400 hover:text-blue-500"
+                                            onClick={handleEdit}>
+                                            Edit
+                                        </button>
+                                        <button type="button" className="text-gray-400 hover:text-red-500"
+                                            onClick={() => onDelete(comment._id)}>
+                                            Delete
+                                        </button>
+                                    </>
                                 )
                             }
                         </div>
