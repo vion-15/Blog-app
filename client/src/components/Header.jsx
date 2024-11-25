@@ -1,6 +1,6 @@
 //! ada 3 library yang digunakan intuk header.jsx
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react"; //!library flowbite-react
-import { Link, useLocation } from "react-router-dom"; //!library react-router-dom
+import { Link, useLocation, useNavigate } from "react-router-dom"; //!library react-router-dom
 import {AiOutlineSearch} from "react-icons/ai"; //!library react-icon
 import {FaMoon, FaSun} from "react-icons/fa";
 import {useSelector, useDispatch} from "react-redux";
@@ -10,6 +10,7 @@ import { signoutSuccess } from "../redux/user/userSlice";
 
 export default function Header() {
     const path = useLocation().pathname;
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {currentUser} = useSelector((state) =>  state.user);
     const {theme} = useSelector((state) => state.theme);
@@ -23,6 +24,7 @@ export default function Header() {
                 console.log(data.message);
             }else{
                 dispatch(signoutSuccess());
+                navigate('/sign-in');
             }
         } catch (error) {
             console.log(error)
