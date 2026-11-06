@@ -84,9 +84,9 @@ export default function CreatePost() {
                     onChange={(e) => setFormData({...formData, title: e.target.value})}/>
                     <Select onChange={(e) => setFormData({...formData, category: e.target.value})}>
                         <option value="uncategorized">Pilih Kategori</option>
-                        <option value="sports">Sports</option>
-                        <option value="games">Games</option>
-                        <option value="anime">Anime</option>
+                        <option value="Genshin Impact">Genshin Impact</option>
+                        <option value="Honkai: Star Rail">Honkai Star Rail</option>
+                        <option value="Zenless Zone Zero">Zenless Zone Zero</option>
                     </Select>
                 </div>
                 <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-4">

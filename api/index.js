@@ -6,8 +6,11 @@ import authRoutes from './routes/auth.route.js';
 import postRoutes from './routes/post.route.js';
 import commentRoutes from './routes/comment.route.js';
 import cookieParser from 'cookie-parser';
+import dns from "node:dns"
 
 dotenv.config();
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 mongoose.connect(process.env.MONGO).then(() => {
     console.log("MongoDB terhubung");
